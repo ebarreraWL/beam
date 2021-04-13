@@ -44,6 +44,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: "Check are GCP variables set"
-        run: "./local-env-setup.sh"
+      - name: "Installing local dependencies"
+        run: "sudo ./local-env-setup.sh"
         id: local_env_install
