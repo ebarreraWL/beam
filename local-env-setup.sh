@@ -35,8 +35,8 @@ if [ "$(uname -s)" = "Linux" ]; then
     # Assuming Debian based Linux and the prerequisites in https://beam.apache.org/contribute/ are met:
     apt-get update
 
-    echo "Installing openjdk-8-jdk, python-setuptools, python3-pip, virtualenv, tox, containerd docker.io"
-    apt-get install -y openjdk-8-jdk python-setuptools python3-pip virtualenv tox containerd docker.io # using python3-pip as Python3 is required.
+    echo "Installing openjdk-8-jdk, python-setuptools, python3-pip, virtualenv, tox, docker.io"
+    apt-get install -y openjdk-8-jdk python-setuptools python3-pip virtualenv tox docker.io # using python3-pip as Python3 is required.
 
     type -P python3 > /dev/null 2>&1
     python3Exists=$?
