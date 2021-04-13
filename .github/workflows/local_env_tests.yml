@@ -48,7 +48,7 @@ jobs:
         run: "sudo ./local-env-setup.sh"
         id: local_env_install_ubuntu
 
-    run_local_env_install_mac:
+  run_local_env_install_mac:
     timeout-minutes: 15
     name: "Run local environment shell script"
     runs-on: macos-latest
