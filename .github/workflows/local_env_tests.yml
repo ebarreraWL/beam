@@ -40,7 +40,7 @@ jobs:
 
   run_local_env_install_ubuntu:
     timeout-minutes: 15
-    name: "Run local environment shell script"
+    name: "Ubuntu run local environment shell script"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -50,10 +50,10 @@ jobs:
 
   run_local_env_install_mac:
     timeout-minutes: 15
-    name: "Run local environment shell script"
+    name: "Mac run local environment shell script"
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - name: "Installing local dependencies"
-        run: "sudo ./local-env-setup.sh"
+        run: "./local-env-setup.sh"
         id: local_env_install_mac
