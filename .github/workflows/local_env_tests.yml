@@ -37,8 +37,6 @@ on:
 
 
 jobs:
-
-
   run_local_env_install_mac:
     timeout-minutes: 50
     name: "Mac run local environment shell script"
