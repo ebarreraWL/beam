@@ -35,8 +35,8 @@ if [ "$(uname -s)" = "Linux" ]; then
     # Assuming Debian based Linux and the prerequisites in https://beam.apache.org/contribute/ are met:
     apt-get update
 
-    echo "Installing openjdk-8-jdk, python-setuptools, python3-pip, virtualenv, tox, docker.io"
-    apt-get install -y openjdk-8-jdk python-setuptools python3-pip virtualenv tox docker.io # using python3-pip as Python3 is required.
+    echo "Installing openjdk-8-jdk, python-setuptools, python3-pip, tox, docker.io"
+    apt-get install -y openjdk-8-jdk python-setuptools python3-pip tox docker.io # using python3-pip as Python3 is required.
 
     type -P python3 > /dev/null 2>&1
     python3Exists=$?
@@ -44,7 +44,9 @@ if [ "$(uname -s)" = "Linux" ]; then
     pip3Exists=$?
     if [ $python3Exists -eq 0  -a $pip3Exists -eq 0 ]; then
         echo "Installing grpcio-tools and mypy-protobuf"
-        pip3 install grpcio-tools mypy-protobuf
+        pip3 install grpcio-tools mypy-protobuf virtualenv
+        which virtualenv
+        virtualenv --version
     else
         echo "Python3 and pip3 are required. Installation Failed."
         exit
