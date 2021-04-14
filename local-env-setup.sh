@@ -18,9 +18,6 @@
 darwin_install_pip3_packages() {
     echo "Installing virtualenv, grpcio-tools, mypy-protobuf"
     pip3 install setuptools grpcio-tools mypy-protobuf virtualenv --user
-    export PATH=/Users/runner/Library/Python/3.9/bin:$PATH
-    echo $PATH
-    which virtualenv
 }
 
 install_go_packages(){
@@ -48,8 +45,6 @@ if [ "$(uname -s)" = "Linux" ]; then
     if [ $python3Exists -eq 0  -a $pip3Exists -eq 0 ]; then
         echo "Installing grpcio-tools and mypy-protobuf"
         pip3 install grpcio-tools mypy-protobuf virtualenv
-        which virtualenv
-        virtualenv --version
     else
         echo "Python3 and pip3 are required. Installation Failed."
         exit
