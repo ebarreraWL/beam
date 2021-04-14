@@ -59,5 +59,5 @@ jobs:
         run: "./local-env-setup.sh"
         id: local_env_install_mac
       - name: "Gradle check"
-        run: "export PATH=$(which virtualenv); echo $PATH; ./gradlew --warning-mode all checkSetup --stacktrace";
+        run: "export PATH=$(which virtualenv); echo $PATH; ./gradlew --warning-mode all checkSetup --stacktrace;"
         id: local_env_install_gradle_check_mac
