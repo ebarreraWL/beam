@@ -46,8 +46,5 @@ jobs:
       - name: "Installing local env dependencies"
         run: "./local-env-setup.sh"
         id: local_env_install_mac
-      - name: "Gradle check"
-        run: "echo $PATH"
-        run: "which virtualenv"
-        run: "./gradlew --warning-mode all checkSetup --stacktrace"
+        run: "echo $PATH; which virtualenv; ./gradlew --warning-mode all checkSetup --stacktrace"
         id: local_env_install_gradle_check_mac
