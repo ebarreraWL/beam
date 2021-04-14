@@ -19,6 +19,8 @@ darwin_install_pip3_packages() {
     echo "Installing virtualenv, grpcio-tools, mypy-protobuf"
     pip3 install setuptools grpcio-tools mypy-protobuf virtualenv --user
     export PATH=/Users/runner/Library/Python/3.9/bin:$PATH
+    echo $PATH
+    which virtualenv
 }
 
 install_go_packages(){
