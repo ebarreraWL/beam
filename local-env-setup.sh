@@ -16,8 +16,10 @@
 # limitations under the License.
 
 darwin_install_pip3_packages() {
-    echo "Installing virtualenv, grpcio-tools, mypy-protobuf"
-    pip3 install setuptools grpcio-tools mypy-protobuf virtualenv
+    echo "Installing setuptools grpcio-tools virtualenv"
+    pip3 install setuptools grpcio-tools virtualenv
+    echo "Installing mypy-protobuf"
+    pip3 install --user mypy-protobuf
 }
 
 install_go_packages(){
