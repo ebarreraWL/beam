@@ -22,12 +22,12 @@ import (
 )
 
 // WindowInto applies the windowing strategy to each element.
-func WindowInto(s Scope, ws *window.Fn, col PCollection) PCollection {
-	return Must(TryWindowInto(s, ws, col))
+func WindowInto(s Scope, ws *window.Fn, wt *window.Trigger, col PCollection) PCollection {
+	return Must(TryWindowInto(s, ws, wt, col))
 }
 
 // TryWindowInto attempts to insert a WindowInto transform.
-func TryWindowInto(s Scope, ws *window.Fn, col PCollection) (PCollection, error) {
+func TryWindowInto(s Scope, ws *window.Fn, wt *window.Trigger, col PCollection) (PCollection, error) {
 	if !s.IsValid() {
 		return PCollection{}, errors.New("invalid scope")
 	}
@@ -35,7 +35,7 @@ func TryWindowInto(s Scope, ws *window.Fn, col PCollection) (PCollection, error)
 		return PCollection{}, errors.New("invalid input pcollection")
 	}
 
-	edge := graph.NewWindowInto(s.real, s.scope, ws, col.n)
+	edge := graph.NewWindowInto(s.real, s.scope, ws, wt, col.n)
 	ret := PCollection{edge.Output[0].To}
 	return ret, nil
 }

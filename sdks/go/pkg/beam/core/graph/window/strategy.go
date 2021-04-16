@@ -19,8 +19,8 @@ package window
 // WindowingStrategy defines the types of windowing used in a pipeline and contains
 // the data to support executing a windowing strategy.
 type WindowingStrategy struct {
-	Fn *Fn
-
+	Fn      *Fn
+	Trigger *Trigger
 	// TODO(BEAM-3304): trigger support
 }
 
@@ -34,5 +34,5 @@ func (ws *WindowingStrategy) String() string {
 
 // DefaultWindowingStrategy returns the default windowing strategy.
 func DefaultWindowingStrategy() *WindowingStrategy {
-	return &WindowingStrategy{Fn: NewGlobalWindows()}
+	return &WindowingStrategy{Fn: NewGlobalWindows(), Trigger: &Trigger{Kind: NeverTrigger}}
 }

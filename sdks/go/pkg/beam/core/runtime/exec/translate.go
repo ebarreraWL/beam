@@ -171,12 +171,18 @@ func (b *builder) makeWindowingStrategy(id string) (*window.WindowingStrategy, e
 	if err != nil {
 		return nil, err
 	}
-	w := &window.WindowingStrategy{Fn: wfn}
+	wt, err := unmarshalWindowTrigger(ws.GetTrigger())
+	if err != nil {
+		return nil, err
+	}
+	w := &window.WindowingStrategy{Fn: wfn, Trigger: wt}
 	b.windowing[id] = w
 	return w, nil
 }
 
 func unmarshalWindowFn(wfn *pipepb.FunctionSpec) (*window.Fn, error) {
+	fmt.Println("Debug line unmarshalWindowFn - $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+
 	switch urn := wfn.GetUrn(); urn {
 	case graphx.URNGlobalWindowsWindowFn:
 		return window.NewGlobalWindows(), nil
@@ -190,6 +196,7 @@ func unmarshalWindowFn(wfn *pipepb.FunctionSpec) (*window.Fn, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		return window.NewFixedWindows(size), nil
 
 	case graphx.URNSlidingWindowsWindowFn:
@@ -221,6 +228,13 @@ func unmarshalWindowFn(wfn *pipepb.FunctionSpec) (*window.Fn, error) {
 	default:
 		return nil, errors.Errorf("unsupported window type: %v", urn)
 	}
+}
+
+func unmarshalWindowTrigger(wt *pipepb.Trigger) (*window.Trigger, error) {
+	fmt.Println("Debug line unmarshalWindowTrigger - $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+	fmt.Printf("ProtoReflect: %v \n", wt.ProtoReflect())
+
+	return nil, nil
 }
 
 func (b *builder) makePCollections(out []string) ([]Node, error) {
@@ -523,6 +537,7 @@ func (b *builder) makeLink(from string, id linkID) (Node, error) {
 			return nil, errors.Wrapf(err, "invalid WindowInto payload for %v", transform)
 		}
 		wfn, err := unmarshalWindowFn(wp.GetWindowFn())
+		fmt.Printf("Payload %#v\n", payload)
 		if err != nil {
 			return nil, err
 		}

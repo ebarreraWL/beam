@@ -787,8 +787,8 @@ func (m *marshaller) expandReshuffle(edge NamedEdge) (string, error) {
 				WindowFn: windowFn,
 				// ...output after every element is received...
 				Trigger: &pipepb.Trigger{
-					Trigger: &pipepb.Trigger_Always_{
-						Always: &pipepb.Trigger_Always{},
+					Trigger: &pipepb.Trigger_Never_{
+						Never: &pipepb.Trigger_Never{},
 					},
 				},
 				// ...and after outputing, discard the output elements...
@@ -967,6 +967,10 @@ func marshalWindowingStrategy(c *CoderMarshaller, w *window.WindowingStrategy) (
 	if err != nil {
 		return nil, err
 	}
+	windowTrigger, err := makeTrigger(w.Trigger)
+	if err != nil {
+		return nil, err
+	}
 	coderId, err := makeWindowCoder(w.Fn)
 	if err != nil {
 		return nil, err
@@ -980,17 +984,44 @@ func marshalWindowingStrategy(c *CoderMarshaller, w *window.WindowingStrategy) (
 		MergeStatus:      pipepb.MergeStatus_NON_MERGING,
 		AccumulationMode: pipepb.AccumulationMode_DISCARDING,
 		WindowCoderId:    windowCoderId,
-		Trigger: &pipepb.Trigger{
+		Trigger:          windowTrigger,
+		OutputTime:       pipepb.OutputTime_END_OF_WINDOW,
+		ClosingBehavior:  pipepb.ClosingBehavior_EMIT_IF_NONEMPTY,
+		AllowedLateness:  0,
+		OnTimeBehavior:   pipepb.OnTimeBehavior_FIRE_ALWAYS,
+	}
+	return ws, nil
+}
+
+func makeTrigger(wt *window.Trigger) (*pipepb.Trigger, error) {
+	switch wt.Kind {
+	case window.NeverTrigger:
+		return &pipepb.Trigger{
+			Trigger: &pipepb.Trigger_Never_{
+				Never: &pipepb.Trigger_Never{},
+			},
+		}, nil
+	case window.DefaultTrigger:
+		return &pipepb.Trigger{
 			Trigger: &pipepb.Trigger_Default_{
 				Default: &pipepb.Trigger_Default{},
 			},
-		},
-		OutputTime:      pipepb.OutputTime_END_OF_WINDOW,
-		ClosingBehavior: pipepb.ClosingBehavior_EMIT_IF_NONEMPTY,
-		AllowedLateness: 0,
-		OnTimeBehavior:  pipepb.OnTimeBehavior_FIRE_ALWAYS,
+		}, nil
+	case window.AlwaysTrigger:
+		return &pipepb.Trigger{
+			Trigger: &pipepb.Trigger_Always_{
+				Always: &pipepb.Trigger_Always{},
+			},
+		}, nil
+	case window.ElementTrigger:
+		return &pipepb.Trigger{
+			Trigger: &pipepb.Trigger_ElementCount_{
+				ElementCount: &pipepb.Trigger_ElementCount{ElementCount: int32(wt.Count)},
+			},
+		}, nil
+	default:
+		return nil, errors.Errorf("unexpected trigger: %v", wt)
 	}
-	return ws, nil
 }
 
 func makeWindowFn(w *window.Fn) (*pipepb.FunctionSpec, error) {
